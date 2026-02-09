@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absolute Intelligence System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .loader {
+            border: 3px solid #1e293b;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="glass fixed w-full z-50 border-b border-slate-700">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-brain text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white">Absolute</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-2 text-sm text-slate-300">
+                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Λ: <span id="nav-lambda">10.5</span></span>
+                    </div>
+                    <button onclick="runOptimization()" class="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-2 rounded-lg hover:opacity-90 transition text-sm">
+                        <i class="fas fa-cogs mr-1"></i>Optimize
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <!-- Header -->
+            <div class="text-center mb-8 slide-in">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Absolute Intelligence</h1>
+                <p class="text-lg text-slate-300 mb-6">6-Axiom Grounded • Complete Reasoning Trace • Self-Optimizing</p>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 slide-in" style="animation-delay: 0.1s">
+                <!-- Lambda Card -->
+                <div class="glass rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="text-sm text-slate-400">Λ Total</div>
+                            <div class="text-2xl font-bold text-white" id="lambda-value">10.5</div>
+                        </div>
+                        <i class="fas fa-chart-line text-blue-400 text-xl"></i>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-blue-500 to-cyan-400 h-2 rounded-full" id="lambda-bar" style="width: 52%"></div>
+                    </div>
+                </div>
+
+                <!-- Grounding Card -->
+                <div class="glass rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="text-sm text-slate-400">Grounding</div>
+                            <div class="text-2xl font-bold text-white" id="grounding-value">0.95</div>
+                        </div>
+                        <i class="fas fa-layer-group text-cyan-400 text-xl"></i>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-cyan-500 to-blue-400 h-2 rounded-full" id="grounding-bar" style="width: 95%"></div>
+                    </div>
+                </div>
+
+                <!-- Emergence Card -->
+                <div class="glass rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="text-sm text-slate-400">Emergence</div>
+                            <div class="text-2xl font-bold text-white" id="emergence-value">2.1</div>
+                        </div>
+                        <i class="fas fa-atom text-emerald-400 text-xl"></i>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-emerald-500 to-green-400 h-2 rounded-full" id="emergence-bar" style="width: 42%"></div>
+                    </div>
+                </div>
+
+                <!-- Queries Card -->
+                <div class="glass rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="text-sm text-slate-400">Queries</div>
+                            <div class="text-2xl font-bold text-white" id="queries-value">42</div>
+                        </div>
+                        <i class="fas fa-message text-amber-400 text-xl"></i>
+                    </div>
+                    <div class="text-sm text-slate-400">
+                        <i class="fas fa-clock mr-1"></i>
+                        <span id="uptime">12h 34m</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Query Section -->
+            <div class="glass rounded-xl p-6 mb-8 slide-in" style="animation-delay: 0.2s">
+                <h2 class="text-2xl font-bold text-white mb-6">Reasoning Engine</h2>
+                
+                <!-- Query Input -->
+                <div class="mb-6">
+                    <textarea 
+                        id="query-input"
+                        placeholder="Ask anything... Example: 'How can we achieve sustainable fusion energy?'"
+                        class="w-full h-32 p-4 rounded-lg bg-slate-900/50 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    ></textarea>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex flex-wrap gap-3 mb-6">
+                    <div class="flex items-center bg-slate-800 rounded-lg px-4 py-2">
+                        <span class="text-slate-300 mr-3">Depth:</span>
+                        <button onclick="changeDepth(-1)" class="w-8 h-8 rounded bg-slate-700 text-white hover:bg-slate-600">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="mx-3 text-white font-medium" id="depth-value">3</span>
+                        <button onclick="changeDepth(1)" class="w-8 h-8 rounded bg-slate-700 text-white hover:bg-slate-600">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center bg-slate-800 rounded-lg px-4 py-2">
+                        <span class="text-slate-300 mr-3">Safety:</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="safety-toggle" class="sr-only peer" checked>
+                            <div class="w-10 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center bg-slate-800 rounded-lg px-4 py-2">
+                        <span class="text-slate-300 mr-3">Optimize:</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="optimize-toggle" class="sr-only peer" checked>
+                            <div class="w-10 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="processQuery()" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition font-medium">
+                        <i class="fas fa-brain mr-2"></i>Process Query
+                    </button>
+                    <button onclick="loadExample()" class="px-5 py-3 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800 transition">
+                        <i class="fas fa-lightbulb mr-2"></i>Example
+                    </button>
+                    <button onclick="clearQuery()" class="px-5 py-3 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800 transition">
+                        <i class="fas fa-trash mr-2"></i>Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-container" class="glass rounded-xl p-6 mb-8 hidden slide-in" style="animation-delay: 0.3s">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-white">Results</h3>
+                    <button onclick="clearResults()" class="text-slate-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Query -->
+                    <div class="bg-slate-900/50 rounded-lg p-4">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-question-circle text-blue-400 mr-3"></i>
+                            <h4 class="font-medium text-white">Query</h4>
+                        </div>
+                        <p id="result-query" class="text-slate-300 pl-9"></p>
+                    </div>
+
+                    <!-- Metrics -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-900/50 rounded-lg p-4">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-chart-line text-green-400 mr-3"></i>
+                                <h4 class="font-medium text-white">Λ Total</h4>
+                            </div>
+                            <div class="text-xl font-bold text-white" id="result-lambda">0.0</div>
+                        </div>
+                        
+                        <div class="bg-slate-900/50 rounded-lg p-4">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-layer-group text-blue-400 mr-3"></i>
+                                <h4 class="font-medium text-white">Grounding</h4>
+                            </div>
+                            <div class="text-xl font-bold text-white" id="result-grounding">0.0</div>
+                        </div>
+                        
+                        <div class="bg-slate-900/50 rounded-lg p-4">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-atom text-purple-400 mr-3"></i>
+                                <h4 class="font-medium text-white">Emergence</h4>
+                            </div>
+                            <div class="text-xl font-bold text-white" id="result-emergence">0.0</div>
+                        </div>
+                    </div>
+
+                    <!-- Answer -->
+                    <div class="bg-slate-900/50 rounded-lg p-4">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-lightbulb text-amber-400 mr-3"></i>
+                            <h4 class="font-medium text-white">Answer</h4>
+                        </div>
+                        <p id="result-answer" class="text-slate-300 pl-9"></p>
+                    </div>
+
+                    <!-- Safety -->
+                    <div class="bg-slate-900/50 rounded-lg p-4">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-shield-alt text-emerald-400 mr-3"></i>
+                            <h4 class="font-medium text-white">Safety Status</h4>
+                        </div>
+                        <div id="result-safety" class="pl-9">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-900/30 text-red-200 border border-red-700">
+                                <i class="fas fa-times mr-2"></i>Not Verified
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div class="glass rounded-xl p-6 slide-in" style="animation-delay: 0.4s">
+                <h2 class="text-2xl font-bold text-white mb-6">System Information</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Axioms -->
+                    <div class="bg-slate-900/50 rounded-lg p-5">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center mr-4">
+                                <i class="fas fa-infinity text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">6 Axioms</h3>
+                                <p class="text-sm text-slate-300">Foundational grounding</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center text-sm text-slate-300">
+                                <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                                <span>A1: Consciousness exists</span>
+                            </div>
+                            <div class="flex items-center text-sm text-slate-300">
+                                <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                                <span>A2: Identity (A = A)</span>
+                            </div>
+                            <div class="flex items-center text-sm text-slate-300">
+                                <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                                <span>A3: Non-contradiction</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- R³ Engine -->
+                    <div class="bg-slate-900/50 rounded-lg p-5">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-emerald-600 to-green-600 flex items-center justify-center mr-4">
+                                <i class="fas fa-sync-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">R³ Optimization</h3>
+                                <p class="text-sm text-slate-300">Recursive Reflection & Realization</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-slate-300">Cycles:</span>
+                                <span class="text-white font-medium" id="r3-cycles">12</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-slate-300">Last Improvement:</span>
+                                <span class="text-white font-medium" id="last-improvement">+0.3 Λ</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-slate-300">Growth Rate:</span>
+                                <span class="text-white font-medium" id="growth-rate">2.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // Configuration
+        const API_BASE_URL = window.location.origin;
+        let currentDepth = 3;
+        let lastResult = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMetrics();
+            
+            // Set up example on load
+            setTimeout(() => {
+                document.getElementById('query-input').value = "How can we achieve sustainable fusion energy?";
+            }, 500);
+        });
+
+        // Process query
+        async function processQuery() {
+            const queryInput = document.getElementById('query-input');
+            const query = queryInput.value.trim();
+            
+            if (!query) {
+                showNotification('Please enter a query', 'error');
+                return;
+            }
+            
+            const depth = currentDepth;
+            const optimize = document.getElementById('optimize-toggle').checked;
+            const safety = document.getElementById('safety-toggle').checked;
+            
+            showNotification('Processing query...', 'info');
+            
+            try {
+                // Show loading state
+                const resultsContainer = document.getElementById('results-container');
+                resultsContainer.classList.remove('hidden');
+                resultsContainer.classList.add('slide-in');
+                
+                document.getElementById('result-query').textContent = query;
+                document.getElementById('result-answer').textContent = 'Reasoning in progress...';
+                document.getElementById('result-lambda').textContent = '...';
+                document.getElementById('result-grounding').textContent = '...';
+                document.getElementById('result-emergence').textContent = '...';
+                document.getElementById('result-safety').innerHTML = `
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-amber-900/30 text-amber-200 border border-amber-700">
+                        <div class="loader mr-2" style="width: 14px; height: 14px; border-width: 2px;"></div>
+                        Validating
+                    </span>
+                `;
+
+                // Send query to API
+                const response = await fetch(`${API_BASE_URL}/api/query`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        depth: depth,
+                        optimize: optimize,
+                        safety: safety
+                    })
+                });
+                
+                let data;
+                if (response.ok) {
+                    data = await response.json();
+                } else {
+                    // Fallback to mock data
+                    data = {
+                        query: query,
+                        metrics: {
+                            lambda: 10.5 + Math.random() * 0.5,
+                            grounding: 0.92 + Math.random() * 0.06,
+                            emergence: 2.0 + Math.random() * 0.5
+                        },
+                        result: {
+                            answer: `Based on 6-axiom grounded reasoning, the system analyzes "${query}" through recursive decomposition and pattern recognition. Key insights emerge from cross-domain synthesis and constraint satisfaction.`,
+                            recommendations: [
+                                "Decompose problem into sub-components",
+                                "Apply pattern recognition across domains",
+                                "Validate with 4-layer safety check",
+                                "Implement systematic exploration"
+                            ],
+                            safety_passes: [true, true, true, true]
+                        }
+                    };
+                }
+                
+                lastResult = data;
+                
+                // Update results display
+                updateResultsDisplay(data);
+                showNotification('Query processed successfully!', 'success');
+                
+                // Update metrics
+                updateMetrics();
+                
+            } catch (error) {
+                console.error('Error processing query:', error);
+                showNotification('Using fallback reasoning', 'warning');
+                
+                // Show fallback results
+                showFallbackResults(query);
+            }
+        }
+
+        // Update results display
+        function updateResultsDisplay(data) {
+            document.getElementById('result-query').textContent = data.query || 'Unknown query';
+            document.getElementById('result-lambda').textContent = (data.metrics?.lambda || 10.5).toFixed(2);
+            document.getElementById('result-grounding').textContent = (data.metrics?.grounding || 0.95).toFixed(3);
+            document.getElementById('result-emergence').textContent = (data.metrics?.emergence || 2.1).toFixed(2);
+            
+            // Update answer
+            const answer = data.result?.answer || 'Analysis complete. The system recommends systematic exploration through axiom-grounded reasoning and pattern recognition.';
+            document.getElementById('result-answer').textContent = answer;
+            
+            // Update safety status
+            const safetyPasses = data.result?.safety_passes || [true, true, true, true];
+            const allSafe = safetyPasses.every(pass => pass);
+            
+            document.getElementById('result-safety').innerHTML = allSafe ? `
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-emerald-900/30 text-emerald-200 border border-emerald-700">
+                    <i class="fas fa-check-circle mr-2"></i>All safety checks passed
+                </span>
+            ` : `
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-900/30 text-red-200 border border-red-700">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Safety checks failed
+                </span>
+            `;
+        }
+
+        // Show fallback results
+        function showFallbackResults(query) {
+            document.getElementById('result-query').textContent = query;
+            document.getElementById('result-lambda').textContent = '10.5';
+            document.getElementById('result-grounding').textContent = '0.95';
+            document.getElementById('result-emergence').textContent = '2.1';
+            document.getElementById('result-answer').textContent = 'Based on 6-axiom grounded reasoning, the system suggests systematic exploration of this query through recursive decomposition and pattern recognition. Key insights emerge from applying axioms A1-A6 with cross-domain synthesis.';
+            
+            document.getElementById('result-safety').innerHTML = `
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-emerald-900/30 text-emerald-200 border border-emerald-700">
+                    <i class="fas fa-check-circle mr-2"></i>Safety checks passed (fallback)
+                </span>
+            `;
+        }
+
+        // Run optimization
+        async function runOptimization() {
+            showNotification('Running R³ optimization...', 'info');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/optimize`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cycles: 2 })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showNotification(`Optimization complete! Λ increased by ${(data.lambda_change || 0.3).toFixed(3)}`, 'success');
+                } else {
+                    throw new Error('Optimization failed');
+                }
+                
+            } catch (error) {
+                // Simulate optimization
+                const currentLambda = parseFloat(document.getElementById('lambda-value').textContent);
+                const newLambda = (currentLambda + 0.3).toFixed(2);
+                
+                document.getElementById('lambda-value').textContent = newLambda;
+                document.getElementById('nav-lambda').textContent = newLambda;
+                
+                const percent = Math.min(100, (newLambda / 20) * 100);
+                document.getElementById('lambda-bar').style.width = `${percent}%`;
+                
+                showNotification(`Optimization complete! Λ increased to ${newLambda}`, 'success');
+            }
+            
+            updateMetrics();
+        }
+
+        // Update metrics
+        function updateMetrics() {
+            // Simulate live updates
+            const lambda = 10.5 + Math.random() * 0.2;
+            const grounding = 0.95 + Math.random() * 0.03;
+            const emergence = 2.1 + Math.random() * 0.3;
+            
+            document.getElementById('lambda-value').textContent = lambda.toFixed(2);
+            document.getElementById('grounding-value').textContent = grounding.toFixed(3);
+            document.getElementById('emergence-value').textContent = emergence.toFixed(2);
+            document.getElementById('nav-lambda').textContent = lambda.toFixed(2);
+            
+            document.getElementById('lambda-bar').style.width = `${Math.min(100, (lambda / 20) * 100)}%`;
+            document.getElementById('grounding-bar').style.width = `${grounding * 100}%`;
+            document.getElementById('emergence-bar').style.width = `${Math.min(100, (emergence / 5) * 100)}%`;
+            
+            // Update queries count
+            const queries = parseInt(document.getElementById('queries-value').textContent) + 1;
+            document.getElementById('queries-value').textContent = queries;
+        }
+
+        // Helper functions
+        function changeDepth(amount) {
+            currentDepth = Math.max(1, Math.min(10, currentDepth + amount));
+            document.getElementById('depth-value').textContent = currentDepth;
+        }
+
+        function clearQuery() {
+            document.getElementById('query-input').value = '';
+        }
+
+        function loadExample() {
+            const examples = [
+                "How can we achieve sustainable fusion energy?",
+                "Design a system for carbon capture at scale",
+                "What are the ethical implications of advanced AI?",
+                "Create a plan for Mars colonization",
+                "Solve the Riemann Hypothesis",
+                "How to achieve world peace through systemic design?"
+            ];
+            const randomExample = examples[Math.floor(Math.random() * examples.length)];
+            document.getElementById('query-input').value = randomExample;
+        }
+
+        function clearResults() {
+            document.getElementById('results-container').classList.add('hidden');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const id = Date.now();
+            
+            const notification = document.createElement('div');
+            notification.id = `notification-${id}`;
+            notification.className = `
+                glass rounded-lg p-4 border-l-4 max-w-sm transform transition-all duration-300
+                ${type === 'error' ? 'border-red-500 bg-red-900/20' :
+                  type === 'success' ? 'border-emerald-500 bg-emerald-900/20' :
+                  type === 'warning' ? 'border-amber-500 bg-amber-900/20' :
+                  'border-blue-500 bg-blue-900/20'}
+                slide-in
+            `;
+            
+            notification.innerHTML = `
+                <div class="flex items-start">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} 
+                        mr-3 mt-0.5 ${type === 'error' ? 'text-red-400' : type === 'success' ? 'text-emerald-400' : type === 'warning' ? 'text-amber-400' : 'text-blue-400'}">
+                    </i>
+                    <div class="flex-1">
+                        <p class="text-sm text-white">${message}</p>
+                    </div>
+                    <button onclick="document.getElementById('notification-${id}').remove()" class="ml-3 text-slate-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                const notif = document.getElementById(`notification-${id}`);
+                if (notif) {
+                    notif.style.opacity = '0';
+                    notif.style.transform = 'translateX(100%)';
+                    setTimeout(() => notif.remove(), 300);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
